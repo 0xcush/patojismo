@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 interface CalibrationRecord {
   id: string;
@@ -106,11 +106,45 @@ export default function Home() {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [editId, setEditId] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<"recent" | "rating" | "ratio" | "time">("recent");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const importInputRef = useRef<HTMLInputElement>(null);
+
+  // Extraction timer
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [timerElapsed, setTimerElapsed] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const startTimeRef = useRef<number>(0);
 
   useEffect(() => {
     setRecords(loadRecords());
   }, []);
+
+  useEffect(() => {
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, []);
+
+  function startTimer() {
+    startTimeRef.current = Date.now() - timerElapsed * 1000;
+    setTimerRunning(true);
+    intervalRef.current = setInterval(() => {
+      setTimerElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
+    }, 100);
+  }
+
+  function stopTimer() {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setTimerRunning(false);
+    setForm((f) => ({ ...f, timeSeconds: String(timerElapsed) }));
+  }
+
+  function resetTimer() {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setTimerRunning(false);
+    setTimerElapsed(0);
+    setForm((f) => ({ ...f, timeSeconds: "" }));
+  }
 
   const dose = parseFloat(form.dose) || 0;
   const weight = parseFloat(form.weight) || 0;
@@ -196,6 +230,60 @@ export default function Home() {
     setEditId(null);
     setForm({ coffee: "", dose: "", timeSeconds: "", weight: "", notes: "", rating: 0, images: [] });
   }
+
+  function handleExport() {
+    const blob = new Blob([JSON.stringify(records, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `patojismo_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function handleImport(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const imported: CalibrationRecord[] = JSON.parse(text);
+      if (!Array.isArray(imported)) throw new Error();
+      setRecords((prev) => {
+        const existingIds = new Set(prev.map((r) => r.id));
+        const merged = [...prev, ...imported.filter((r) => r.id && !existingIds.has(r.id))];
+        saveRecords(merged);
+        return merged;
+      });
+    } catch {
+      alert("Archivo inválido. Asegúrate de importar un JSON exportado desde Patojismo.");
+    }
+    e.target.value = "";
+  }
+
+  function handleClone(record: CalibrationRecord) {
+    setForm({
+      coffee: record.coffee,
+      dose: String(record.dose),
+      timeSeconds: String(record.timeSeconds),
+      weight: String(record.weight),
+      notes: "",
+      rating: 0,
+      images: [],
+    });
+    setEditId(null);
+    window.scrollTo({ top: 0 });
+  }
+
+  const filteredAndSorted = useMemo(() => {
+    let result = records.filter((r) =>
+      r.coffee.toLowerCase().includes(search.toLowerCase())
+    );
+    if (sortBy === "recent") result = [...result].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    else if (sortBy === "rating") result = [...result].sort((a, b) => b.rating - a.rating);
+    else if (sortBy === "ratio") result = [...result].sort((a, b) => b.ratio - a.ratio);
+    else if (sortBy === "time") result = [...result].sort((a, b) => a.timeSeconds - b.timeSeconds);
+    return result;
+  }, [records, search, sortBy]);
 
   return (
     <div className="flex h-screen bg-stone-950 text-stone-100 overflow-hidden">
@@ -354,7 +442,46 @@ export default function Home() {
               {records.length === 0 ? "Sin registros" : `${records.length} calibración${records.length !== 1 ? "es" : ""}`}
             </p>
           </div>
+          <div className="flex gap-2">
+            <input ref={importInputRef} type="file" accept=".json" className="hidden" onChange={handleImport} />
+            <button
+              onClick={() => importInputRef.current?.click()}
+              className="text-xs text-stone-400 hover:text-stone-200 px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 transition-colors cursor-pointer"
+            >
+              Importar
+            </button>
+            <button
+              onClick={handleExport}
+              disabled={records.length === 0}
+              className="text-xs text-stone-400 hover:text-stone-200 px-3 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Exportar JSON
+            </button>
+          </div>
         </div>
+
+        {/* Filter + sort bar */}
+        {records.length > 0 && (
+          <div className="px-6 py-3 border-b border-stone-800 shrink-0 flex gap-3">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar por café..."
+              className="flex-1 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-sm text-stone-100 placeholder-stone-600 focus:outline-none focus:border-amber-500 transition-colors"
+            />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-sm text-stone-300 focus:outline-none focus:border-amber-500 transition-colors cursor-pointer"
+            >
+              <option value="recent">Más reciente</option>
+              <option value="rating">Mejor valoración</option>
+              <option value="ratio">Mayor ratio</option>
+              <option value="time">Menor tiempo</option>
+            </select>
+          </div>
+        )}
 
         {/* Records list */}
         <div className="flex-1 overflow-y-auto px-6 py-5">
@@ -363,9 +490,14 @@ export default function Home() {
               <span className="text-5xl mb-4">☕</span>
               <p className="text-sm">Guarda tu primera calibración.</p>
             </div>
+          ) : filteredAndSorted.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full text-stone-600">
+              <span className="text-4xl mb-3">🔍</span>
+              <p className="text-sm">Sin resultados para &ldquo;{search}&rdquo;</p>
+            </div>
           ) : (
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 auto-rows-min">
-              {records.map((r) => (
+              {filteredAndSorted.map((r) => (
                 <div
                   key={r.id}
                   className="bg-stone-900 border border-stone-800 rounded-xl p-4 hover:border-stone-700 transition-colors flex flex-col gap-3"
@@ -432,6 +564,12 @@ export default function Home() {
 
                   {/* Actions */}
                   <div className="flex gap-2 justify-end pt-1">
+                    <button
+                      onClick={() => handleClone(r)}
+                      className="text-xs text-stone-400 hover:text-stone-200 px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 transition-colors cursor-pointer"
+                    >
+                      Clonar
+                    </button>
                     <button
                       onClick={() => handleEdit(r)}
                       className="text-xs text-stone-400 hover:text-stone-200 px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 transition-colors cursor-pointer"
