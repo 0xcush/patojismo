@@ -1,0 +1,21 @@
+{
+  "lots": [
+    {
+      "id": "LOT-2024-ETH-01",
+      "origin": "Ethiopia",
+      "region": "Yirgacheffe",
+      "farm": "Kochere Cooperative",
+      "process": "Natural",
+      "variety": "Heirloom",
+      "weight_received_kg": 20,
+      "weight_remaining_kg": 18.5,
+      "cost_per_kg": 12.50,
+      "arrival_date": "2026-02-15",
+      "status": "active",
+      "qc_status": "approved",
+      "cupping_score": 87.25,
+      "moisture_pct": 11.2,
+      "notes": "Exceptional lot. Blueberry, jasmine, wine-like."
+    }
+  ]
+}

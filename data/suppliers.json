@@ -1,0 +1,40 @@
+{
+  "suppliers": [
+    {
+      "id": "SUP-001",
+      "name": "Lácteos del Valle",
+      "contact": "ventas@lacteosdelvalle.com",
+      "category": "dairy",
+      "lead_time_days": 1,
+      "payment_terms": "net-7",
+      "reliability_pct": 96
+    },
+    {
+      "id": "SUP-002",
+      "name": "PackCafé",
+      "contact": "pedidos@packcafe.com",
+      "category": "packaging",
+      "lead_time_days": 3,
+      "payment_terms": "net-15",
+      "reliability_pct": 92
+    },
+    {
+      "id": "SUP-003",
+      "name": "BaristaSupply",
+      "contact": "orders@baristasupply.com",
+      "category": "equipment-consumables",
+      "lead_time_days": 5,
+      "payment_terms": "net-30",
+      "reliability_pct": 98
+    },
+    {
+      "id": "SUP-004",
+      "name": "Importadora Cafés Especiales",
+      "contact": "compras@cafesesp.com",
+      "category": "green-beans",
+      "lead_time_days": 14,
+      "payment_terms": "net-30",
+      "reliability_pct": 94
+    }
+  ]
+}

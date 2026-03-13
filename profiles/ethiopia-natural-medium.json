@@ -1,0 +1,26 @@
+{
+  "name": "ethiopia-natural-medium",
+  "lot_id": "LOT-2024-ETH-01",
+  "version": "1.0",
+  "date": "2026-03-13",
+  "parameters": {
+    "charge_temp_c": 200,
+    "charge_weight_kg": 4,
+    "yellow_point": { "time": "5:00", "temp_c": 160 },
+    "first_crack":  { "time": "9:30", "temp_c": 196 },
+    "development_time": "1:15",
+    "dtr_pct": 12,
+    "drop_temp_c": 210,
+    "total_time": "10:45"
+  },
+  "target_roast_level": "medium-light",
+  "expected_yield_loss_pct": 13,
+  "notes": "Natural process — watch for scorching. Drop early to preserve fruit. ROR should taper gently through first crack.",
+  "qc_signoff": {
+    "signed": true,
+    "date": "2026-03-13",
+    "cupper": "QC",
+    "score": 87.25,
+    "notes": "Confirmed: blueberry, jasmine, wine forward. Excellent structure."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Pour Over — Ethiopia Yirgacheffe",
+  "method": "v60",
+  "lot_id": "LOT-2024-ETH-01",
+  "version": "1.0",
+  "date": "2026-03-13",
+  "parameters": {
+    "dose_g": 15,
+    "water_g": 250,
+    "ratio": "1:16.7",
+    "temp_c": 93,
+    "total_time": "3:30",
+    "grind_note": "Medium — coarser than espresso, finer than French press",
+    "bloom": {
+      "water_g": 30,
+      "time_s": 45
+    },
+    "pours": [
+      { "pour": 1, "at_s": 45,  "target_g": 100, "note": "Slow spiral pour" },
+      { "pour": 2, "at_s": 90,  "target_g": 175, "note": "Maintain level" },
+      { "pour": 3, "at_s": 150, "target_g": 250, "note": "Final pour, let drain" }
+    ]
+  },
+  "tasting_notes": "Blueberry, jasmine, wine-like sweetness, brilliantly clean finish.",
+  "signed_by": "barista",
+  "qc_approved": true
+}

@@ -1,0 +1,13 @@
+{
+  "consumables": [
+    { "item": "Whole milk",    "unit": "L",   "quantity": 15,  "reorder_point": 10,  "supplier_id": "SUP-001" },
+    { "item": "Oat milk",      "unit": "L",   "quantity": 8,   "reorder_point": 6,   "supplier_id": "SUP-001" },
+    { "item": "Almond milk",   "unit": "L",   "quantity": 4,   "reorder_point": 3,   "supplier_id": "SUP-001" },
+    { "item": "Cups 8oz",      "unit": "unit","quantity": 200, "reorder_point": 100, "supplier_id": "SUP-002" },
+    { "item": "Cups 12oz",     "unit": "unit","quantity": 150, "reorder_point": 100, "supplier_id": "SUP-002" },
+    { "item": "Lids",          "unit": "unit","quantity": 300, "reorder_point": 150, "supplier_id": "SUP-002" },
+    { "item": "Filters V60",   "unit": "unit","quantity": 80,  "reorder_point": 50,  "supplier_id": "SUP-003" },
+    { "item": "Cleaning tabs", "unit": "unit","quantity": 40,  "reorder_point": 20,  "supplier_id": "SUP-003" },
+    { "item": "Simple syrup",  "unit": "L",   "quantity": 2,   "reorder_point": 1,   "supplier_id": "SUP-001" }
+  ]
+}

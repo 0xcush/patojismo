@@ -1,0 +1,19 @@
+{
+  "name": "Espresso",
+  "method": "espresso",
+  "lot_id": "LOT-2024-ETH-01",
+  "version": "1.0",
+  "date": "2026-03-13",
+  "parameters": {
+    "dose_g": 18,
+    "yield_g": 36,
+    "ratio": "1:2",
+    "time_s": 27,
+    "temp_c": 93,
+    "pressure_bar": 9,
+    "grind_note": "Fine — aim for 27s pull"
+  },
+  "tasting_notes": "Dark chocolate, hazelnut, citrus finish. Clean, low bitterness.",
+  "signed_by": "barista",
+  "qc_approved": true
+}

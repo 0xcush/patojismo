@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-03-13",
+  "items": [
+    {
+      "name": "Espresso",
+      "category": "espresso",
+      "lot_id": "LOT-2024-ETH-01",
+      "recipe": "espresso",
+      "price": 3.50,
+      "available": true,
+      "description": "Intenso, chocolatoso, cuerpo sedoso",
+      "tasting_notes": "Dark chocolate, hazelnut, citrus finish"
+    },
+    {
+      "name": "Cortado",
+      "category": "espresso",
+      "lot_id": "LOT-2024-ETH-01",
+      "recipe": "cortado",
+      "price": 4.00,
+      "available": true,
+      "description": "Balance espresso-leche, suave y concentrado",
+      "tasting_notes": "Chocolate, caramel, light berry"
+    },
+    {
+      "name": "Flat White",
+      "category": "espresso",
+      "lot_id": "LOT-2024-ETH-01",
+      "recipe": "flat-white",
+      "price": 4.50,
+      "available": true,
+      "description": "Cremoso, dulce, terciopelo",
+      "tasting_notes": "Blueberry, milk chocolate, smooth"
+    },
+    {
+      "name": "Pour Over",
+      "category": "filter",
+      "lot_id": "LOT-2024-ETH-01",
+      "recipe": "v60-ethiopian",
+      "price": 5.00,
+      "available": true,
+      "description": "Ethiopia Yirgacheffe Natural — floral, frutal, brillante",
+      "tasting_notes": "Blueberry, jasmine, wine-like, clean finish"
+    },
+    {
+      "name": "Cold Brew",
+      "category": "filter",
+      "lot_id": "LOT-2024-ETH-01",
+      "recipe": "cold-brew",
+      "price": 4.50,
+      "available": true,
+      "description": "16h steep, concentrado y refrescante",
+      "tasting_notes": "Dark fruit, low acidity, chocolate"
+    }
+  ]
+}
