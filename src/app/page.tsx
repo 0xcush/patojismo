@@ -324,27 +324,86 @@ export default function Home() {
 
           {/* Dose / Time / Weight */}
           <div className="grid grid-cols-3 gap-3">
-            {[
-              { label: "Dosis (g)", key: "dose", placeholder: "18.0", step: "0.1" },
-              { label: "Tiempo (s)", key: "timeSeconds", placeholder: "27", step: "1" },
-              { label: "Gramaje (g)", key: "weight", placeholder: "36.0", step: "0.1" },
-            ].map(({ label, key, placeholder, step }) => (
-              <div key={key}>
-                <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-1.5">
-                  {label}
-                </label>
-                <input
-                  type="number"
-                  step={step}
-                  min="0"
-                  value={form[key as keyof typeof form] as string}
-                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                  placeholder={placeholder}
-                  required
-                  className="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2.5 text-sm text-stone-100 placeholder-stone-600 focus:outline-none focus:border-amber-500 transition-colors"
-                />
+            {/* Dosis */}
+            <div>
+              <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-1.5">
+                Dosis (g)
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                value={form.dose}
+                onChange={(e) => setForm({ ...form, dose: e.target.value })}
+                placeholder="18.0"
+                required
+                className="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2.5 text-sm text-stone-100 placeholder-stone-600 focus:outline-none focus:border-amber-500 transition-colors"
+              />
+            </div>
+
+            {/* Tiempo — with extraction timer */}
+            <div>
+              <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-1.5">
+                Tiempo (s)
+              </label>
+              <input
+                type="number"
+                step="1"
+                min="0"
+                value={timerRunning ? timerElapsed : form.timeSeconds}
+                onChange={(e) => !timerRunning && setForm({ ...form, timeSeconds: e.target.value })}
+                readOnly={timerRunning}
+                placeholder="27"
+                required
+                className={`w-full bg-stone-900 border rounded-lg px-3 py-2.5 text-sm text-stone-100 placeholder-stone-600 focus:outline-none transition-colors ${timerRunning ? "border-amber-500 text-amber-400" : "border-stone-700 focus:border-amber-500"}`}
+              />
+              <div className="flex gap-1 mt-1.5">
+                {!timerRunning ? (
+                  <button
+                    type="button"
+                    onClick={startTimer}
+                    title="Iniciar"
+                    className="flex-1 bg-emerald-900/60 hover:bg-emerald-800/80 text-emerald-400 rounded-md py-1 text-xs font-medium transition-colors cursor-pointer"
+                  >
+                    ▶
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={stopTimer}
+                    title="Detener"
+                    className="flex-1 bg-red-900/60 hover:bg-red-800/80 text-red-400 rounded-md py-1 text-xs font-medium transition-colors cursor-pointer"
+                  >
+                    ■
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={resetTimer}
+                  title="Reiniciar"
+                  className="flex-1 bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-stone-200 rounded-md py-1 text-xs font-medium transition-colors cursor-pointer"
+                >
+                  ↺
+                </button>
               </div>
-            ))}
+            </div>
+
+            {/* Gramaje */}
+            <div>
+              <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-1.5">
+                Gramaje (g)
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                value={form.weight}
+                onChange={(e) => setForm({ ...form, weight: e.target.value })}
+                placeholder="36.0"
+                required
+                className="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2.5 text-sm text-stone-100 placeholder-stone-600 focus:outline-none focus:border-amber-500 transition-colors"
+              />
+            </div>
           </div>
 
           {/* Live ratio */}
