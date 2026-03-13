@@ -6,6 +6,7 @@ interface CalibrationRecord {
   id: string;
   createdAt: string;
   coffee: string;
+  grind: string;
   dose: number;
   timeSeconds: number;
   weight: number;
@@ -95,6 +96,7 @@ export default function Home() {
   const [records, setRecords] = useState<CalibrationRecord[]>([]);
   const [form, setForm] = useState({
     coffee: "",
+    grind: "",
     dose: "",
     timeSeconds: "",
     weight: "",
@@ -173,7 +175,7 @@ export default function Home() {
     if (editId) {
       updated = records.map((r) =>
         r.id === editId
-          ? { ...r, coffee: form.coffee, dose: d, timeSeconds: t, weight: w, ratio: w / d, notes: form.notes, rating: form.rating, images: form.images }
+          ? { ...r, coffee: form.coffee, grind: form.grind, dose: d, timeSeconds: t, weight: w, ratio: w / d, notes: form.notes, rating: form.rating, images: form.images }
           : r
       );
       setEditId(null);
@@ -183,6 +185,7 @@ export default function Home() {
           id: crypto.randomUUID(),
           createdAt: new Date().toISOString(),
           coffee: form.coffee,
+          grind: form.grind,
           dose: d,
           timeSeconds: t,
           weight: w,
@@ -197,7 +200,7 @@ export default function Home() {
 
     setRecords(updated);
     saveRecords(updated);
-    setForm({ coffee: "", dose: "", timeSeconds: "", weight: "", notes: "", rating: 0, images: [] });
+    setForm({ coffee: "", grind: "", dose: "", timeSeconds: "", weight: "", notes: "", rating: 0, images: [] });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -205,6 +208,7 @@ export default function Home() {
   function handleEdit(record: CalibrationRecord) {
     setForm({
       coffee: record.coffee,
+      grind: record.grind ?? "",
       dose: String(record.dose),
       timeSeconds: String(record.timeSeconds),
       weight: String(record.weight),
@@ -228,7 +232,7 @@ export default function Home() {
 
   function handleCancelEdit() {
     setEditId(null);
-    setForm({ coffee: "", dose: "", timeSeconds: "", weight: "", notes: "", rating: 0, images: [] });
+    setForm({ coffee: "", grind: "", dose: "", timeSeconds: "", weight: "", notes: "", rating: 0, images: [] });
   }
 
   function handleExport() {
@@ -263,6 +267,7 @@ export default function Home() {
   function handleClone(record: CalibrationRecord) {
     setForm({
       coffee: record.coffee,
+      grind: record.grind ?? "",
       dose: String(record.dose),
       timeSeconds: String(record.timeSeconds),
       weight: String(record.weight),
@@ -318,6 +323,20 @@ export default function Home() {
               value={form.coffee}
               onChange={(e) => setForm({ ...form, coffee: e.target.value })}
               placeholder="Etiopía Yirgacheffe, lote 03"
+              className="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2.5 text-sm text-stone-100 placeholder-stone-600 focus:outline-none focus:border-amber-500 transition-colors"
+            />
+          </div>
+
+          {/* Molino */}
+          <div>
+            <label className="block text-xs font-medium text-stone-500 uppercase tracking-widest mb-1.5">
+              Molino
+            </label>
+            <input
+              type="text"
+              value={form.grind}
+              onChange={(e) => setForm({ ...form, grind: e.target.value })}
+              placeholder="Ej. EK43 · 9.5, Comandante · 25 clicks"
               className="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2.5 text-sm text-stone-100 placeholder-stone-600 focus:outline-none focus:border-amber-500 transition-colors"
             />
           </div>
@@ -567,6 +586,9 @@ export default function Home() {
                       <p className="font-medium text-stone-100 truncate text-sm">
                         {r.coffee || <span className="text-stone-500 italic">Sin nombre</span>}
                       </p>
+                      {r.grind && (
+                        <p className="text-xs text-stone-400 mt-0.5 truncate">{r.grind}</p>
+                      )}
                       <p className="text-xs text-stone-500 mt-0.5">
                         {new Date(r.createdAt).toLocaleString("es-MX", {
                           day: "numeric", month: "short", year: "numeric",
